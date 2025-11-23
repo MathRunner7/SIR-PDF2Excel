@@ -1,4 +1,4 @@
-name: Build macOS app
+name: Build Windows app
 
 on:
   workflow_dispatch:  # run manually from the Actions tab
@@ -6,8 +6,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build-macos:
-    runs-on: macos-latest
+  build-windows:
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -24,20 +24,12 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      # If you ever decide to run tests or the script in CI and need poppler/tesseract on the runner,
-      # you can uncomment this block:
-      #
-      # - name: Install system dependencies (optional)
-      #   run: |
-      #     brew install tesseract
-      #     brew install poppler
-
-      - name: Build macOS binary with PyInstaller
+      - name: Build Windows exe with PyInstaller
         run: |
-          pyinstaller --noconfirm --onefile app.py --add-data "tess:tess"
+          pyinstaller --noconfirm --onefile app.py --add-data "tess;tess"
 
-      - name: Upload macOS artifact
+      - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macos-ocr-app
+          name: windows-ocr-app
           path: dist/
