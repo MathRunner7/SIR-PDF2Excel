@@ -2,7 +2,7 @@
 Gujarat SIR Data PDF to Excel convertor
 
 # How to use this application?
-1. Go to the [releases](https://github.com/MathRunner7/SIR-PDF2Excel/releases) and download the latest version of the application.
+1. Go to the [SIR-pdf2excel (Gujarat) latest releases](https://github.com/MathRunner7/SIR-PDF2Excel/releases/latest) and download the latest version of the application.
     For Windows users, download the `SIR-pdf2excel-windows.exe` file.
     For macOS users, download the `SIR-pdf2excel-macos` file.
     ![img.png](assets/img.png)
