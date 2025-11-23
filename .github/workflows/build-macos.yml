@@ -1,0 +1,44 @@
+name: Build macOS app
+
+on:
+  workflow_dispatch:  # run manually from the Actions tab
+  # You can also add:
+  # push:
+  #   branches: [ main ]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      # If you ever decide to run tests or the script in CI and need poppler/tesseract on the runner,
+      # you can uncomment this block:
+      #
+      # - name: Install system dependencies (optional)
+      #   run: |
+      #     brew install tesseract
+      #     brew install poppler
+
+      - name: Build macOS binary with PyInstaller
+        run: |
+          pyinstaller --noconfirm --onefile app.py --add-data "tess:tess"
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-ocr-app
+          path: dist/
