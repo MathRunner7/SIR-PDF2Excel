@@ -1,12 +1,12 @@
 name: Build and Release
 
 on:
-  # Run automatically when you push a tag like v1.0.0, v1.1.2, etc.
+  # Automatically build + release when you push a tag like v1.0.0
   push:
     tags:
       - "v*"
 
-  # Also allow manual runs from the Actions tab
+  # Allow manual runs too if needed
   workflow_dispatch:
 
 jobs:
@@ -30,12 +30,12 @@ jobs:
 
       - name: Build Windows exe with PyInstaller
         run: |
-          pyinstaller --noconfirm --onefile app.py --add-data "tess;tess"
+          pyinstaller --noconfirm --onefile --name SIR-pdf2excel app.py --add-data "tess;tess"
 
-      - name: Upload Windows artifact
+      - name: Upload Windows dist folder
         uses: actions/upload-artifact@v4
         with:
-          name: windows-ocr-app
+          name: windows-dist
           path: dist/
 
   build-macos:
@@ -58,12 +58,12 @@ jobs:
 
       - name: Build macOS binary with PyInstaller
         run: |
-          pyinstaller --noconfirm --onefile app.py --add-data "tess:tess"
+          pyinstaller --noconfirm --onefile --name SIR-pdf2excel app.py --add-data "tess:tess"
 
-      - name: Upload macOS artifact
+      - name: Upload macOS dist folder
         uses: actions/upload-artifact@v4
         with:
-          name: macos-ocr-app
+          name: macos-dist
           path: dist/
 
   create-release:
@@ -74,17 +74,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download Windows artifact
+      - name: Download Windows dist
         uses: actions/download-artifact@v4
         with:
-          name: windows-ocr-app
-          path: release-assets/windows
+          name: windows-dist
+          path: release/windows
 
-      - name: Download macOS artifact
+      - name: Download macOS dist
         uses: actions/download-artifact@v4
         with:
-          name: macos-ocr-app
-          path: release-assets/macos
+          name: macos-dist
+          path: release/macos
+
+      - name: Prepare release files (rename binaries)
+        run: |
+          ls -R
+          mv release/windows/SIR-pdf2excel.exe SIR-pdf2excel-windows.exe
+          mv release/macos/SIR-pdf2excel SIR-pdf2excel-macos
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -94,7 +100,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            release-assets/windows/**
-            release-assets/macos/**
+            SIR-pdf2excel-windows.exe
+            SIR-pdf2excel-macos
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

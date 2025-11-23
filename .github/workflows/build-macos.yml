@@ -2,8 +2,8 @@ name: Build macOS app
 
 on:
   workflow_dispatch:  # run manually from the Actions tab
-  push:               # run automatically when code change is pushed to main branch
-    branches: [ main ]
+  #push:               # run automatically when code change is pushed to main branch
+  #  branches: [ main ]
 
 jobs:
   build-macos:
