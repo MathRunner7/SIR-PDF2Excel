@@ -281,14 +281,12 @@ def process_pdf_folder_parallel(folder_path: str) -> None:
     logger.info(f"[PID : {os.getpid()}] Combined data saved to {os.path.join(folder_path, f'{os.path.basename(folder_path)}.xlsx')}")
 
 if __name__ == "__main__":
-    # multiprocessing.freeze_support()
-    # logger.info(f"[PID : {os.getpid()}] Entering main() before input()")
+    multiprocessing.freeze_support()
+    logger.info(f"[PID : {os.getpid()}] Entering main() before input()")
 
-    # directory_path = input("Enter the directory path containing PDF files: ").strip()
+    directory_path = input("Enter the directory path containing PDF files: ").strip()
 
-    paths = ["P143(Nasavadi)"]
-    for directory_path in paths:
-        logger.info(f"[PID : {os.getpid()}] Got directory path: {directory_path}")
-        process_pdf_folder_parallel(directory_path)
+    logger.info(f"[PID : {os.getpid()}] Got directory path: {directory_path}")
+    process_pdf_folder_parallel(directory_path)
 
     logger.info(f"[PID : {os.getpid()}] Finished processing. Exiting.")
